@@ -2,6 +2,7 @@
 import os
 import sys
 
+
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "leoorm_test.settings")
     sys.path.insert(0, '..')

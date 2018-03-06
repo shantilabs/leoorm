@@ -1,7 +1,7 @@
 from distutils.core import setup
 
-from Cython.Build import cythonize
 from pip.req import parse_requirements
+
 
 setup(
     name='leoorm',
@@ -12,6 +12,5 @@ setup(
         'leoorm',
     ],
     url='https://github.com/shantilabs/leoorm',
-    ext_modules=cythonize('leoorm/core.pyx'),
     install_reqs=parse_requirements('requirements.txt')
 )

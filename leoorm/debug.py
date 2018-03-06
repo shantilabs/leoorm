@@ -109,6 +109,8 @@ class FromLine:
         'leoorm' ,
         'asyncio',
         'logging',
+        'Cython',
+        'unittest',
     )):
         self.depth = depth
         self.skip = skip

@@ -1,10 +1,9 @@
 import asyncio
-import cProfile
 import unittest
 
-from leoorm.utils import create_db_pool
-from leoorm.debug import Measure, profile_block
 from leoorm import LeoORM
+from leoorm.debug import Measure
+from leoorm.utils import create_db_pool
 from .models import Author
 
 
@@ -48,9 +47,9 @@ class LeoORMTestCase(unittest.TestCase):
     #         self.assertEquals(author2.id, author.id)
 
     def test_speed_create(self, n=1000):
-        Author.objects.all().delete()
+        Author.objects.all()._raw_delete('default')
+
         ms = Measure()
-        # with profile_block():
         Author.objects.bulk_create([
             Author(name='john smith {}'.format(i))
             for i in range(n)
@@ -61,7 +60,6 @@ class LeoORMTestCase(unittest.TestCase):
         @self._run_coro
         async def test(orm):
             ms = Measure()
-            # with profile_block():
             await orm.save([
                 Author(name='john smith {}'.format(i))
                 for i in range(n)
