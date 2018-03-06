@@ -1,1 +1,3 @@
-# leoorm
+# Django ORM + asyncio
+
+PostgreSQL only.
