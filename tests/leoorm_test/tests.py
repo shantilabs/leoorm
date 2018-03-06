@@ -26,25 +26,25 @@ class LeoORMTestCase(unittest.TestCase):
 
     async def async_init(self):
         self.pool = await create_db_pool(loop=self.loop)
-    #
-    # def test_count(self):
-    #     Author.objects.all().delete()
-    #     author = Author.objects.create(name='john smith')
-    #     self.assertEquals(Author.objects.count(), 1)
-    #
-    #     @self._run_coro
-    #     async def test(orm):
-    #         self.assertEquals(await orm.count(Author), 1)
-    #
-    # def test_get(self):
-    #     Author.objects.all().delete()
-    #     author = Author.objects.create(name='john smith 2')
-    #     self.assertEquals(Author.objects.count(), 1)
-    #
-    #     @self._run_coro
-    #     async def test(orm):
-    #         author2 = await orm.get(Author, name='john smith 2')
-    #         self.assertEquals(author2.id, author.id)
+
+    def test_count(self):
+        Author.objects.all().delete()
+        author = Author.objects.create(name='john smith')
+        self.assertEquals(Author.objects.count(), 1)
+
+        @self._run_coro
+        async def test(orm):
+            self.assertEquals(await orm.count(Author), 1)
+
+    def test_get(self):
+        Author.objects.all().delete()
+        author = Author.objects.create(name='john smith 2')
+        self.assertEquals(Author.objects.count(), 1)
+
+        @self._run_coro
+        async def test(orm):
+            author2 = await orm.get(Author, name='john smith 2')
+            self.assertEquals(author2.id, author.id)
 
     def test_speed_create(self, n=1000):
         Author.objects.all()._raw_delete('default')
