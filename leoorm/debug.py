@@ -10,8 +10,8 @@ logger = logging.getLogger('leoorm')
 
 
 class Measure:
-    def __init__(self):
-        self.start = time.time()
+    def __init__(self, start=None):
+        self.start = time.time() if start is None else start
 
     def _delta(self):
         return (time.time() - self.start) * 1000

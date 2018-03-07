@@ -1,10 +1,10 @@
 import base64
 
 from django.conf import settings
+from django.contrib.sessions.models import Session
 
 
 async def get_dj_session(orm, cookies):
-    from django.contrib.sessions.models import Session
     import ujson
     # FIXME: non-dbbackend and non-json support
     session_key = cookies.get(settings.SESSION_COOKIE_NAME)
