@@ -55,6 +55,8 @@ class LeoORM:
         pk = self.pk(model_class)
         assert not any(getattr(obj, pk) for obj in instances)
         names, values = self._names_values(instances)
+        num_names = len(names)
+        num_instances = len(instances)
         sql = (
             'INSERT INTO {db_table} ({names}) '
             'VALUES {values} '
@@ -64,10 +66,10 @@ class LeoORM:
             pk=pk,
             names=', '.join(names),
             values=', '.join('({})'.format(
-                ', '.join('${}'.format((i + 1) * (j + 1)) for i in range(len(names)))  # noqa
-            ) for j in range(len(instances))),
+                ', '.join('${}'.format(num_names * j + i + 1) for i in range(num_names))
+            ) for j in range(num_instances)),
         )
-        if len(instances) == 1:
+        if num_instances == 1:
             args = values[0]
             coro = self.conn.fetchval(sql, *args)
             val = await self._exec(coro, 'leoorm._save_one', sql, args)
