@@ -21,14 +21,6 @@ class LeoORM:
     def __init__(self, conn):
         self.conn = conn
         self.i = 0
-        models = defaultdict(dict)
-        for m in django.apps.apps.get_models(include_auto_created=True):
-            models[m._meta.app_label][m._meta.object_name] = self.db_table(m)
-        self.tables = {}
-        for app, models in models.items():
-            self.tables[app] = namedtuple(app, models)
-            for k in models:
-                setattr(self.tables[app], k, models[k])
 
     async def save(self, instance_or_list, **update_fields):
         """
@@ -123,7 +115,7 @@ class LeoORM:
             )
         elif args:
             values = list(args)
-            sql = self._norm_sql(values.pop(0))
+            sql = self._replace_tables(values.pop(0))
         else:
             assert False
         coro = self.conn.fetchrow(sql, *values)
@@ -137,7 +129,7 @@ class LeoORM:
         """
         if args:
             values = list(args)
-            sql = self._norm_sql(values.pop(0))
+            sql = self._replace_tables(values.pop(0))
         else:
             cond, values = self._and(kwargs)
             sql = 'SELECT * FROM {db_table} {maybecond} {maybeordering}'.format(
@@ -186,12 +178,12 @@ class LeoORM:
         return await self._exec(coro, 'leoorm.delete', sql, values)
 
     async def exec(self, sql, *values):
-        sql = self._norm_sql(sql)
+        sql = self._replace_tables(sql)
         coro = self.conn.fetchval(sql, *values)
         return await self._exec(coro, 'leoorm.exec', sql, values)
 
     async def get_raw_list(self, sql, *values):
-        sql = self._norm_sql(sql)
+        sql = self._replace_tables(sql)
         coro = self.conn.fetch(sql, *values)
         return await self._exec(coro, 'leoorm.get_raw_list', sql, values)
 
@@ -337,8 +329,18 @@ class LeoORM:
     def pk(cls, model_class):
         return model_class._meta.pk.name
 
-    def _norm_sql(self, sql):
-        return ' '.join(sql.format(**self.tables).strip().split())
+    _tables = {}
+
+    def _replace_tables(self, sql):
+        if not self._tables:
+            models = defaultdict(dict)
+            for m in django.apps.apps.get_models(include_auto_created=True):
+                models[m._meta.app_label][m._meta.object_name] = self.db_table(m)  # noqa
+            for app, models in models.items():
+                self._tables[app] = namedtuple(app, models)
+                for k in models:
+                    setattr(self._tables[app], k, models[k])
+        return ' '.join(sql.format(**self._tables).strip().split())
 
     async def _exec(self, coro, name, sql, values=None):
         ms = Measure()
