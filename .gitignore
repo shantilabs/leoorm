@@ -3,4 +3,4 @@ __pycache__
 .idea
 *.pyc
 *.c
-leoorm.egg-info
+*.egg-info

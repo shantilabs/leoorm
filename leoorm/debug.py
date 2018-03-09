@@ -13,17 +13,17 @@ class Measure:
     def __init__(self, start=None):
         self.start = time.time() if start is None else start
 
-    def _delta(self):
+    def get_ms(self):
         return (time.time() - self.start) * 1000
 
     def __float__(self):
-        return self._delta()
+        return self.get_ms()
 
     def __int__(self):
-        return int(self._delta())
+        return int(self.get_ms())
 
     def __str__(self):
-        return self.timeformat(self._delta())
+        return self.timeformat(self.get_ms())
 
     def __repr__(self):
         return '<Measure: %s>' % self
