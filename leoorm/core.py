@@ -135,8 +135,7 @@ class LeoORM:
                 db_table=self.db_table(model_class),
                 maybecond='WHERE {}'.format(cond) if cond else '',
                 maybeordering='ORDER BY {}'.format(', '.join(
-                    f'{f[1:]} DESC'
-                    if f.startswith('-') else f
+                    '{} DESC'.format(f[1:]) if f.startswith('-') else f
                     for f in model_class._meta.ordering)
                 ) if model_class._meta.ordering else '',
             )
@@ -347,7 +346,6 @@ class LeoORM:
         try:
             result = await coro
         except:
-            # from_line не надо, внизу целый traceback
             logger.error(
                 '%s: #%d %s: %s %s',
                 name,
