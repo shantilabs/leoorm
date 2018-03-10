@@ -126,3 +126,11 @@ class FromLine:
             if len(lines) >= self.depth:
                 break
         return '\n'.join(lines)
+
+
+class LazyStr:
+    def __init__(self, func):
+        self.func = func
+
+    def __str__(self):
+        return str(self.func())

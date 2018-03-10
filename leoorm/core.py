@@ -8,11 +8,10 @@ import django.apps
 from django.contrib.postgres.fields import JSONField
 from django.db.models import FileField, OneToOneRel
 from django.db.models.base import ModelState
-from django.utils.functional import lazy
 from django.utils.itercompat import is_iterable
 from django.utils.timezone import now
 
-from .debug import Measure, FromLine
+from .debug import Measure, FromLine, LazyStr
 
 logger = logging.getLogger('leoorm')
 
@@ -355,7 +354,7 @@ class LeoORM:
                 self.i,
                 ms,
                 sql,
-                lazy(lambda: str(dict(enumerate(values, start=1)) if values else '')),  # noqa
+                LazyStr(lambda: dict(enumerate(values, start=1)) if values else ''),  # noqa
             )
             raise
         logger.debug(
@@ -364,8 +363,8 @@ class LeoORM:
             self.i,
             ms,
             sql,
-            lazy(lambda: str(dict(enumerate(values, start=1)) if values else '')),  # noqa
-            lazy(lambda: str(FromLine(1))),
+            LazyStr(lambda: dict(enumerate(values, start=1)) if values else ''),  # noqa
+            LazyStr(lambda: FromLine(1)),
         )
         return result
 
