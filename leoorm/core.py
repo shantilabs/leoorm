@@ -373,6 +373,8 @@ class LeoORM:
         'lte': '<=',
         'in': 'ANY',
         'isnull': 'IS NULL',
+        'contains': '~',
+        'icontains': '~*',
     }
 
     def _and(self, kwargs):
