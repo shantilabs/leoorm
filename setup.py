@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='leoorm',
-    version='1.2',
+    version='1.2.1',
     author='Maxim Oransky',
     author_email='maxim.oransky@gmail.com',
     packages=[

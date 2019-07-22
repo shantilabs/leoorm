@@ -91,8 +91,7 @@ def django_db_warning():
 
 
 def _warn(sql, i, ms):
-    # from raven.contrib.django.raven_compat.models import client
-    # client.captureMessage(f'django_db_warning: {sql}')
+    # capture_message(f'django_db_warning: {sql}')
     logger.warning(
         'leoorm.django_db_warning: #%d %s: %s\n%s',
         i,

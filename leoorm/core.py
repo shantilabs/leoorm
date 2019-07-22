@@ -346,7 +346,7 @@ class LeoORM:
         try:
             result = await coro
         except:
-            logger.error(
+            logger.exception(
                 '%s: #%d %s: %s %s',
                 name,
                 self.i,
