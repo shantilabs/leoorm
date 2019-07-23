@@ -345,6 +345,8 @@ class LeoORM:
         self.i += 1
         try:
             result = await coro
+        except (KeyboardInterrupt, CancelledError):
+            raise
         except:
             logger.exception(
                 '%s: #%d %s: %s %s',
