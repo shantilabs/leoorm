@@ -1,3 +1,4 @@
+import asyncio
 import json
 import logging
 from collections import namedtuple, defaultdict
@@ -345,7 +346,7 @@ class LeoORM:
         self.i += 1
         try:
             result = await coro
-        except (KeyboardInterrupt, CancelledError):
+        except (KeyboardInterrupt, asyncio.CancelledError):
             raise
         except:
             logger.exception(
